@@ -1,0 +1,16 @@
+{
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "name": "ng-ast",
+  "version": "0.0.0",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "ng",
+    "abstract",
+    "syntax",
+    "tree",
+    "ast",
+    "module"
+  ],
+  "homepage": "https://github.com/bahmutov/ng-ast"
+}
