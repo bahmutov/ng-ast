@@ -1,10 +1,12 @@
 var benv = require('benv');
+var join = require('path').join;
+var angularPath = join(__dirname, '../bower_components/angular/angular.min.js');
 
 describe('basic', function () {
   beforeEach(function setupEnvironment(done) {
     benv.setup(function () {
       benv.expose({
-        angular: benv.require('../bower_components/angular/angular.js', 'angular')
+        angular: benv.require(angularPath, 'angular')
       });
 
       done();
