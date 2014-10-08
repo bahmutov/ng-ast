@@ -29,12 +29,12 @@ describe('module with values', function () {
       .value('bar', 'baz');
   });
 
-  it('has value foo', function () {
+  it('has value', function () {
     var injector = angular.injector(['foo']);
     la(injector.has('bar'));
   });
 
-  it('module foo provides value foo', function () {
+  it('module foo provides value bar', function () {
     var node = ast('foo');
     la(check.array(node.values));
     la(node.values.length === 1);
@@ -64,15 +64,91 @@ describe('module with constant', function () {
       .constant('bar', 'baz');
   });
 
-  it('has constant foo', function () {
+  it('has constant', function () {
     var injector = angular.injector(['foo']);
     la(injector.has('bar'));
   });
 
-  it('module foo provides constant foo', function () {
+  it('module foo provides constant bar', function () {
     var node = ast('foo');
     la(check.array(node.constants));
     la(node.constants.length === 1);
     la(node.constants[0] === 'bar');
+  });
+});
+
+describe('module with service', function () {
+  /* global ast */
+  beforeEach(function setupEnvironment(done) {
+    benv.setup(function () {
+      benv.expose({
+        angular: benv.require(angularPath, 'angular'),
+        ast: benv.require('../ng-ast.js', 'ngAst')
+      });
+
+      done();
+    });
+  });
+
+  afterEach(function () {
+    benv.teardown(true);
+  });
+
+  beforeEach(function loadMyApp() {
+    angular.module('foo', [])
+      .value('foo', 'foo value')
+      .service('bar', function (foo) {
+        return foo;
+      });
+  });
+
+  it('has service bar', function () {
+    var injector = angular.injector(['foo']);
+    la(injector.has('bar'));
+  });
+
+  it('module foo provides service bar', function () {
+    var node = ast('foo');
+    la(check.array(node.services));
+    la(node.services.length === 1);
+    la(node.services[0] === 'bar');
+  });
+});
+
+describe('module with factory', function () {
+  /* global ast */
+  beforeEach(function setupEnvironment(done) {
+    benv.setup(function () {
+      benv.expose({
+        angular: benv.require(angularPath, 'angular'),
+        ast: benv.require('../ng-ast.js', 'ngAst')
+      });
+
+      done();
+    });
+  });
+
+  afterEach(function () {
+    benv.teardown(true);
+  });
+
+  beforeEach(function loadMyApp() {
+    angular.module('foo', [])
+      .value('foo', 'foo value')
+      .factory('bar', function (foo) {
+        return foo;
+      });
+  });
+
+  it('has factory bar', function () {
+    var injector = angular.injector(['foo']);
+    la(injector.has('bar'));
+  });
+
+  it('module foo provides factory bar', function () {
+    var node = ast('foo');
+    la(check.array(node.factories));
+    la(node.factories.length === 1);
+    la(node.factories[0] === 'bar');
   });
 });

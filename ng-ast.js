@@ -7,6 +7,8 @@
   }
   var valueProvider = isProvider.bind(null, 'value');
   var constantProvider = isProvider.bind(null, 'constant');
+  var serviceProvider = isProvider.bind(null, 'service');
+  var factoryProvider = isProvider.bind(null, 'factory');
 
   function providerName(row) {
     return row[2][0];
@@ -30,7 +32,11 @@
       values: m._invokeQueue
         .filter(valueProvider).map(providerName),
       constants: m._invokeQueue
-        .filter(constantProvider).map(providerName)
+        .filter(constantProvider).map(providerName),
+      services: m._invokeQueue
+        .filter(serviceProvider).map(providerName),
+      factories: m._invokeQueue
+        .filter(factoryProvider).map(providerName)
     };
   }
 
