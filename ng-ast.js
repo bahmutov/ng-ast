@@ -13,6 +13,8 @@
   // all found modules by name
   var _modules = {};
 
+  var valueProvider, constantProvider, serviceProvider, factoryProvider;
+
   function moduleToNode(name) {
     if (!name) {
       throw new Error('Expected angular module name');
@@ -26,10 +28,6 @@
       throw new Error('Cannot find module ' + name);
     }
 
-    var valueProvider = angular.bind(null, isProvider, 'value');
-    var constantProvider = angular.bind(null, isProvider, 'constant');
-    var serviceProvider = angular.bind(null, isProvider, 'service');
-    var factoryProvider = angular.bind(null, isProvider, 'factory');
     // console.log(m._invokeQueue);
 
     var node = {
@@ -46,6 +44,7 @@
       children: []
     };
     _modules[name] = node;
+
     m.requires.forEach(function (depName) {
       node.children.push(moduleToNode(depName));
     });
@@ -53,8 +52,15 @@
     return node;
   }
 
+
   function ngAst(name) {
     _modules = {};
+
+    valueProvider = angular.bind(null, isProvider, 'value');
+    constantProvider = angular.bind(null, isProvider, 'constant');
+    serviceProvider = angular.bind(null, isProvider, 'service');
+    factoryProvider = angular.bind(null, isProvider, 'factory');
+
     return moduleToNode(name);
   }
 
