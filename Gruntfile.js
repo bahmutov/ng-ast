@@ -50,6 +50,15 @@ module.exports = function (grunt) {
       }
     },
 
+    'clean-console': {
+      all: {
+        options: {
+          url: 'index.html',
+          timeout: 2 // seconds to wait for any errors
+        }
+      }
+    },
+
     xplain: {
       examples: {
         options: {
@@ -65,5 +74,5 @@ module.exports = function (grunt) {
   plugins.forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('test', ['jshint', 'mochaTest']);
-  grunt.registerTask('default', ['deps-ok', 'nice-package', 'sync', 'test']);
+  grunt.registerTask('default', ['deps-ok', 'nice-package', 'sync', 'test', 'clean-console']);
 };

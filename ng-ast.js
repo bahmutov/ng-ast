@@ -5,10 +5,6 @@
     return Array.isArray(row) &&
       row[1] === type;
   }
-  var valueProvider = isProvider.bind(null, 'value');
-  var constantProvider = isProvider.bind(null, 'constant');
-  var serviceProvider = isProvider.bind(null, 'service');
-  var factoryProvider = isProvider.bind(null, 'factory');
 
   function providerName(row) {
     return row[2][0];
@@ -24,6 +20,10 @@
       throw new Error('Cannot find module ' + name);
     }
 
+    var valueProvider = angular.bind(null, isProvider, 'value');
+    var constantProvider = angular.bind(null, isProvider, 'constant');
+    var serviceProvider = angular.bind(null, isProvider, 'service');
+    var factoryProvider = angular.bind(null, isProvider, 'factory');
     // console.log(m._invokeQueue);
 
     return {
