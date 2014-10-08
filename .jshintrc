@@ -71,9 +71,11 @@
 
   "globals"       : {
     "describe": true,
+    "helpDescribe": true,
     "it": true,
     "beforeEach": true,
     "afterEach": true,
-    "angular": true
+    "angular": true,
+    "la": true
   }
 }

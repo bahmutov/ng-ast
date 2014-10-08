@@ -38,6 +38,16 @@ module.exports = function (grunt) {
         },
         src: ['test/*-spec.js']
       }
+    },
+
+    watch: {
+      options: {
+        atBegin: true
+      },
+      all: {
+        files: ['*.js', 'test/*.js', 'package.json'],
+        tasks: ['jshint', 'test']
+      }
     }
   });
 

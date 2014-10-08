@@ -1,10 +1,12 @@
 /* global window */
 (function (root) {
 
-  function valueProvider(row) {
+  function isProvider(type, row) {
     return Array.isArray(row) &&
-      row[1] === 'value';
+      row[1] === type;
   }
+  var valueProvider = isProvider.bind(null, 'value');
+  var constantProvider = isProvider.bind(null, 'constant');
 
   function providerName(row) {
     return row[2][0];
@@ -26,7 +28,9 @@
       name: name,
       dependencies: m.requires,
       values: m._invokeQueue
-        .filter(valueProvider).map(providerName)
+        .filter(valueProvider).map(providerName),
+      constants: m._invokeQueue
+        .filter(constantProvider).map(providerName)
     };
   }
 
