@@ -10,9 +10,15 @@
     return row[2][0];
   }
 
-  function ngAst(name) {
+  // all found modules by name
+  var _modules = {};
+
+  function moduleToNode(name) {
     if (!name) {
       throw new Error('Expected angular module name');
+    }
+    if (_modules[name]) {
+      return _modules[name];
     }
 
     var m = angular.module(name);
@@ -26,7 +32,7 @@
     var factoryProvider = angular.bind(null, isProvider, 'factory');
     // console.log(m._invokeQueue);
 
-    return {
+    var node = {
       name: name,
       dependencies: m.requires,
       values: m._invokeQueue
@@ -37,8 +43,15 @@
         .filter(serviceProvider).map(providerName),
       factories: m._invokeQueue
         .filter(factoryProvider).map(providerName),
-      children: m.requires.map(ngAst)
+      children: m.requires.map(moduleToNode)
     };
+    _modules[name] = node;
+    return node;
+  }
+
+  function ngAst(name) {
+    _modules = {};
+    return moduleToNode(name);
   }
 
   root.ngAst = ngAst;
