@@ -1,7 +1,7 @@
 {
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "name": "ng-ast",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "keywords": [
     "angular",
@@ -12,5 +12,15 @@
     "ast",
     "module"
   ],
-  "homepage": "https://github.com/bahmutov/ng-ast"
+  "homepage": "https://github.com/bahmutov/ng-ast",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "Gruntfile.js",
+    "index.html",
+    "package.json"
+  ]
 }
