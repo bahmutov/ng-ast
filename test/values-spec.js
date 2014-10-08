@@ -35,10 +35,11 @@ describe('module with values', function () {
   });
 
   it('module foo provides value bar', function () {
-    var node = ast('foo');
-    la(check.array(node.values));
-    la(node.values.length === 1);
-    la(node.values[0] === 'bar');
+    return ast('foo').then(function (node) {
+      la(check.array(node.values));
+      la(node.values.length === 1);
+      la(node.values[0] === 'bar');
+    });
   });
 });
 
@@ -70,10 +71,11 @@ describe('module with constant', function () {
   });
 
   it('module foo provides constant bar', function () {
-    var node = ast('foo');
-    la(check.array(node.constants));
-    la(node.constants.length === 1);
-    la(node.constants[0] === 'bar');
+    return ast('foo').then(function (node) {
+      la(check.array(node.constants));
+      la(node.constants.length === 1);
+      la(node.constants[0] === 'bar');
+    });
   });
 });
 
@@ -108,10 +110,11 @@ describe('module with service', function () {
   });
 
   it('module foo provides service bar', function () {
-    var node = ast('foo');
-    la(check.array(node.services));
-    la(node.services.length === 1);
-    la(node.services[0] === 'bar');
+    return ast('foo').then(function (node) {
+      la(check.array(node.services));
+      la(node.services.length === 1);
+      la(node.services[0] === 'bar');
+    });
   });
 });
 
@@ -146,9 +149,10 @@ describe('module with factory', function () {
   });
 
   it('module foo provides factory bar', function () {
-    var node = ast('foo');
-    la(check.array(node.factories));
-    la(node.factories.length === 1);
-    la(node.factories[0] === 'bar');
+    return ast('foo').then(function (node) {
+      la(check.array(node.factories));
+      la(node.factories.length === 1);
+      la(node.factories[0] === 'bar');
+    });
   });
 });

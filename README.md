@@ -12,7 +12,8 @@
 
     bower install ng-ast
     // include bower_components/ng-ast/ng-ast.js
-    var root = ngAst('Foo');
+    // ngAst returns a promise
+    ngAst('Foo').then(function (root) { ... });
     // builds tree starting with module Foo
 
 Each node has name, dependencies, values, services, etc. (strings).
@@ -47,8 +48,9 @@ A node also has `children` array pointing at required modules.
         }
       ]
     };
-    var root = ngAst('bar');
-    isEqual(root, expected); // true
+    ngAst('bar').then(function (root) {
+      isEqual(root, expected); // true
+    });
 
 ### finds constants with short names
 
@@ -67,12 +69,13 @@ A node also has `children` array pointing at required modules.
       }
       node.children.forEach(verifyConstants);
     }
-    function verifyBar() {
-      var root = ngAst('bar');
-      verifyConstants(root);
-    }
-    check.raises(verifyBar); // true
-    // exception has module name and constants
+    ngAst('bar').then(function (root) {
+      function verifyBar() {
+        verifyConstants(root);
+      }
+      check.raises(verifyBar); // true
+      // exception has module name and constants
+    });
 
 ## Small print
 
