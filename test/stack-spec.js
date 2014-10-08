@@ -20,18 +20,23 @@ describe('deep nesting', function () {
     benv.teardown(true);
   });
 
+  var n = 5000;
   beforeEach(function loadMyApp() {
-    var k, n = 1000;
+    var k;
     for(k = 0; k < n; k += 1) {
       var prev = k > 0 ? ['m' + (k - 1)] : [];
-      angular.module('m' + k, prev);
+      angular.module('m' + k, prev)
+        .value('foo', 'bar');
     }
   });
 
-  it('only has d module once', function () {
-    var root = ast('m999');
-    la(root);
-    la(root.children.length === 1);
+  it('grabs long dependency tree', function (done) {
+    this.timeout(10000);
+    ast('m' + (n - 1)).then(function (root) {
+      la(root);
+      la(root.children.length === 1);
+      done();
+    });
   });
 
 });

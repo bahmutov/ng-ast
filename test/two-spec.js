@@ -31,24 +31,30 @@ describe('two modules', function () {
     console.assert(angular.module('bar'), 'has bar');
   });
 
-  it('creates tree', function () {
-    var node = ast('bar');
-    console.assert(node, 'formed tree from bar');
+  it('creates tree', function (done) {
+    ast('bar').then(function (node) {
+      console.assert(node, 'formed tree from bar');
+      done();
+    });
   });
 
-  it('has child module name', function () {
-    var node = ast('bar');
-    console.assert(node.name === 'bar', 'has name');
-    console.assert(Array.isArray(node.dependencies));
-    console.assert(node.dependencies.length === 1, 'has 1 dependency');
-    console.assert(node.dependencies[0] === 'foo', 'has name');
+  it('has child module name', function (done) {
+    ast('bar').then(function (node) {
+      console.assert(node.name === 'bar', 'has name');
+      console.assert(Array.isArray(node.dependencies));
+      console.assert(node.dependencies.length === 1, 'has 1 dependency');
+      console.assert(node.dependencies[0] === 'foo', 'has name');
+      done();
+    });
   });
 
-  it('has child module', function () {
-    var node = ast('bar');
-    la(check.array(node.children), 'has children array');
-    la(node.children.length === 1, 'has 1 child');
-    la(node.children[0].name === 'foo', 'has name');
+  it('has child module', function (done) {
+    ast('bar').then(function (node) {
+      la(check.array(node.children), 'has children array');
+      la(node.children.length === 1, 'has 1 child');
+      la(node.children[0].name === 'foo', 'has name');
+      done();
+    });
   });
 
 });

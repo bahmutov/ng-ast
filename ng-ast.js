@@ -14,13 +14,14 @@
   var _modules = {};
 
   var valueProvider, constantProvider, serviceProvider, factoryProvider;
+  var $q;
 
   function moduleToNode(name) {
     if (!name) {
       throw new Error('Expected angular module name');
     }
     if (_modules[name]) {
-      return _modules[name];
+      return $q.when(_modules[name]);
     }
 
     var m = angular.module(name);
@@ -45,11 +46,20 @@
     };
     _modules[name] = node;
 
-    m.requires.forEach(function (depName) {
-      node.children.push(moduleToNode(depName));
+    var promises = m.requires.map(function (childName) {
+      var deferred = $q.defer();
+      setTimeout(function () {
+        deferred.resolve(moduleToNode(childName));
+      }, 0);
+      return deferred.promise;
     });
 
-    return node;
+    return $q.all(promises).then(function (childrenNodes) {
+      childrenNodes.forEach(function (n) {
+        node.children.push(n);
+      });
+      return node;
+    });
   }
 
 
@@ -60,6 +70,8 @@
     constantProvider = angular.bind(null, isProvider, 'constant');
     serviceProvider = angular.bind(null, isProvider, 'service');
     factoryProvider = angular.bind(null, isProvider, 'factory');
+
+    $q = angular.injector(['ng']).get('$q');
 
     return moduleToNode(name);
   }

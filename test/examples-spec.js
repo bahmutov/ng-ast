@@ -22,7 +22,7 @@ describe('examples', function () {
     benv.teardown(true);
   });
 
-  it('basic', function () {
+  it('basic', function (done) {
     angular.module('foo', [])
       .value('a', 'value a')
       .service('b', function () {});
@@ -50,11 +50,13 @@ describe('examples', function () {
         }
       ]
     };
-    var root = ngAst('bar');
-    la(isEqual(root, expected), root, expected);
+    ngAst('bar').then(function (root) {
+      la(isEqual(root, expected), root, expected);
+      done();
+    });
   });
 
-  it('finds constants with short names', function () {
+  it('finds constants with short names', function (done) {
     angular.module('foo', [])
       .constant('a', 'value a')
       .service('aService', function () {});
@@ -72,12 +74,14 @@ describe('examples', function () {
       node.children.forEach(verifyConstants);
     }
 
-    function verifyBar() {
-      var root = ngAst('bar');
-      verifyConstants(root);
-    }
 
-    la(check.raises(verifyBar));
+    ngAst('bar').then(function (root) {
+      function verifyBar() {
+        verifyConstants(root);
+      }
+      la(check.raises(verifyBar));
+      done();
+    });
   });
 
 });

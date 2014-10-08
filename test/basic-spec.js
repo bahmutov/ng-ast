@@ -36,14 +36,18 @@ describe('basic', function () {
     console.assert(m);
   });
 
-  it('creates single node tree', function () {
-    var node = ast('foo');
-    console.assert(node);
+  it('creates single node tree', function (done) {
+    ast('foo').then(function (node) {
+      console.assert(node);
+      done();
+    });
   });
 
-  it('has no dependencies', function () {
-    var node = ast('foo');
-    console.assert(Array.isArray(node.dependencies));
-    console.assert(!node.dependencies.length);
+  it('has no dependencies', function (done) {
+    ast('foo').then(function (node) {
+      console.assert(Array.isArray(node.dependencies));
+      console.assert(!node.dependencies.length);
+      done();
+    });
   });
 });
