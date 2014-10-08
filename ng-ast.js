@@ -36,7 +36,8 @@
       services: m._invokeQueue
         .filter(serviceProvider).map(providerName),
       factories: m._invokeQueue
-        .filter(factoryProvider).map(providerName)
+        .filter(factoryProvider).map(providerName),
+      children: m.requires.map(ngAst)
     };
   }
 
