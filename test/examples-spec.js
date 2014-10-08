@@ -3,6 +3,7 @@ var join = require('path').join;
 var angularPath = join(__dirname, '../bower_components/angular/angular.min.js');
 require('lazy-ass');
 var isEqual = require('lodash.isequal');
+var check = require('check-more-types');
 
 describe('examples', function () {
   /* global ngAst */
@@ -51,6 +52,32 @@ describe('examples', function () {
     };
     var root = ngAst('bar');
     la(isEqual(root, expected), root, expected);
+  });
+
+  it('finds constants with short names', function () {
+    angular.module('foo', [])
+      .constant('a', 'value a')
+      .service('aService', function () {});
+
+    angular.module('bar', ['foo'])
+      .constant('b', 4)
+      .factory('aFactory', function () {});
+
+    function isValidName(name) { return name.length > 1; }
+
+    function verifyConstants(node) {
+      if (!node.constants.every(isValidName)) {
+        throw new Error('module ' + node.name + ' has invalid constants ' + node.constants);
+      }
+      node.children.forEach(verifyConstants);
+    }
+
+    function verifyBar() {
+      var root = ngAst('bar');
+      verifyConstants(root);
+    }
+
+    la(check.raises(verifyBar));
   });
 
 });

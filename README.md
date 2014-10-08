@@ -15,9 +15,12 @@
     var root = ngAst('Foo');
     // builds tree starting with module Foo
 
+Each node has name, dependencies, values, services, etc. (strings).
+A node also has `children` array pointing at required modules.
+
 ## Example
 
-### basic
+### basic usage
 
     angular.module('foo', [])
         .value('a', 'value a')
@@ -46,6 +49,30 @@
     };
     var root = ngAst('bar');
     isEqual(root, expected); // true
+
+### finds constants with short names
+
+    angular.module('foo', [])
+        .constant('a', 'value a')
+        .service('aService', function() {});
+    angular.module('bar', ['foo'])
+        .constant('b', 4)
+        .factory('aFactory', function() {});
+    function isValidName(name) {
+      return name.length > 1;
+    }
+    function verifyConstants(node) {
+      if (!node.constants.every(isValidName)) {
+        throw new Error('module ' + node.name + ' has invalid constants ' + node.constants);
+      }
+      node.children.forEach(verifyConstants);
+    }
+    function verifyBar() {
+      var root = ngAst('bar');
+      verifyConstants(root);
+    }
+    check.raises(verifyBar); // true
+    // exception has module name and constants
 
 ## Small print
 
