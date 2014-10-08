@@ -43,9 +43,13 @@
         .filter(serviceProvider).map(providerName),
       factories: m._invokeQueue
         .filter(factoryProvider).map(providerName),
-      children: m.requires.map(moduleToNode)
+      children: []
     };
     _modules[name] = node;
+    m.requires.forEach(function (depName) {
+      node.children.push(moduleToNode(depName));
+    });
+
     return node;
   }
 
