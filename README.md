@@ -8,12 +8,44 @@
 [![dependencies][dependencies-image]][dependencies-url]
 [![devdependencies][ng-ast-devdependencies-image] ][ng-ast-devdependencies-url]
 
-## Install and use
+## Install
 
     bower install ng-ast
     // include bower_components/ng-ast/ng-ast.js
     var root = ngAst('Foo');
     // builds tree starting with module Foo
+
+## Example
+
+### basic
+
+    angular.module('foo', [])
+        .value('a', 'value a')
+        .service('b', function() {});
+    angular.module('bar', ['foo'])
+        .constant('aConst', 4)
+        .factory('aFactory', function() {});
+    var expected = {
+      name: 'bar',
+      dependencies: ['foo'],
+      values: [],
+      constants: ['aConst'],
+      services: [],
+      factories: ['aFactory'],
+      children: [
+        {
+          name: 'foo',
+          dependencies: [],
+          values: ['a'],
+          constants: [],
+          services: ['b'],
+          factories: [],
+          children: []
+        }
+      ]
+    };
+    var root = ngAst('bar');
+    isEqual(root, expected); // true
 
 ## Small print
 

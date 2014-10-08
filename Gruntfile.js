@@ -48,6 +48,16 @@ module.exports = function (grunt) {
         files: ['*.js', 'test/*.js', 'package.json'],
         tasks: ['jshint', 'test']
       }
+    },
+
+    xplain: {
+      examples: {
+        options: {
+          output: 'README.md',
+          framework: 'jasmine'
+        },
+        src: ['test/examples-spec.js']
+      }
     }
   });
 
