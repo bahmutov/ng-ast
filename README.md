@@ -77,6 +77,23 @@ A node also has `children` array pointing at required modules.
       // exception has module name and constants
     });
 
+## Validating names
+
+I included a script to validate module / values / services / etc names.
+
+```js
+// include bower_components/ng-ast/ng-ast.js
+// include bower_components/ng-ast/ng-ast-validate-names.js
+var options = {
+  isValidModuleName: function (name) { return name.length < 10; }
+  // available functions
+  // isValidModuleName, isValidValueName, isValidConstantName, isValidServiceName
+  // isValidFactoryName
+}
+validateAngularModuleNames('rootModuleName', options);
+// throws exception if any name does not pass a check
+```
+
 ## Small print
 
 Author: Gleb Bahmutov &copy; 2014

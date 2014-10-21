@@ -3,9 +3,8 @@ var join = require('path').join;
 var angularPath = join(__dirname, '../bower_components/angular/angular.min.js');
 var checkPath = join(__dirname, '../node_modules/check-types/src/check-types.js');
 require('lazy-ass');
-var check = require('check-more-types');
 
-describe('validating all names', function () {
+describe('validating names with cycle', function () {
   /* global window */
   beforeEach(function setupEnvironment(done) {
     benv.setup(function () {
@@ -28,34 +27,24 @@ describe('validating all names', function () {
     angular.module('a', ['b', 'c']);
     angular.module('b', ['d']);
     angular.module('c', ['d']);
-    angular.module('d', []);
+    angular.module('d', ['a']);
   });
 
+  var count = 0;
   function singleLetter(str) {
+    count += 1;
     return str.length === 1;
   }
 
-  function notd(str) {
-    return str !== 'd';
-  }
-
-  it('has validate function', function () {
-    la(check.has(window, 'validateAngularModuleNames'));
-  });
-
   it('can validate module names', function (done) {
+    setTimeout(function () {
+      la(count === 4, 'there should be 4 modules', count);
+      done();
+    }, 50);
+
     window.validateAngularModuleNames('a', {
-      isValidModuleName: singleLetter
-    });
-
-    setTimeout(done, 50);
-  });
-
-  it.skip('raises exception if module name is invalid', function () {
-    return window.validateAngularModuleNames('a', {
-      isValidModuleName: notd
-    }).catch(function (err) {
-      console.log('failed to validate module names', err);
+      isValidModuleName: singleLetter,
+      verbose: false
     });
   });
 
