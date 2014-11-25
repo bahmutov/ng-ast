@@ -4,18 +4,32 @@
   <meta charset="utf-8">
   <title>ng-ast</title>
 </head>
-<body>
+<body ng-app="foo">
   <a href="https://github.com/bahmutov/ng-ast"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"
   title="Fork me on GitHub - ng-ast"></a>
 
   <h2>Builds runtime syntax tree of Angular modules</h2>
+  <p ng-controller="fooController">
+    <button ng-click="load()">Dummy load</button>
+    <br>{{ data }}</br>
+  </p>
   <pre id="output"></pre>
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script>
     angular.module('foo', [])
       .value('a', 'value a')
-      .service('b', function () {});
+      .service('b', function () {})
+      .controller('fooController', function ($scope, $http) {
+        $scope.load = function () {
+          console.log('making dummy http request');
+          $http.get('/url')
+            .success(function (data, status, headers, config) {
+              console.log('request to url returned data:', data, 'status:', status);
+              $scope.data = data;
+            });
+        };
+      });
 
     angular.module('bar', ['foo'])
       .constant('aConst', 4)
