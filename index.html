@@ -26,9 +26,10 @@
     console.assert(angular, 'missing angular');
     console.assert(ngAst, 'missing ngAst');
     setTimeout(function () {
-      var root = ngAst('bar');
-      console.log(root);
-      document.getElementById('output').innerHTML = JSON.stringify(root, null, 2);
+      ngAst('bar').then(function (root) {
+        console.log(root);
+        document.getElementById('output').innerHTML = JSON.stringify(root, null, 2);
+      });
     }, 1000);
   </script>
 </body>
